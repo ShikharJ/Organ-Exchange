@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load staticfiles %}
+    <title>Branch Change!</title>
+    <link type="text/css" rel="stylesheet" href="{% static "css/materialize.min.css" %}"  media="screen,projection"/>
+
+  </head>
+
+  <body>
+
+    <div class="section no-pad-bot" id="index-banner">
+      <div class="container">
+
+        <br><br>
+        <br><br>
+
+        <h1 class="header center teal-text">Branch Changer!</h1>
+        <div class="row center">
+          <h5 class="header col s12 light">A webapp to find to register for branch change at IIT Bombay</h5>
+          <div class="col offset-s10"><a class="modal-trigger" style="color:teal" href="#modal1">Rules</a></div>
+        </div>
+        <br><br>
+
+        <div id ="register" class="container">
+          <div class="row">
+              <form id ="myform" action = "/submit/" class="col s12" method="post">
+                {% csrf_token %}
+
+                <div class="row">
+
+                <div class="input-field col l6 offset-l3">
+                  <input id="ldapid" name="ldapid" type="text" class="validate" autocomplete="off" value="{{ldapid}}">
+                  <label for="ldapid">Identity</label>
+                </div>
+                <br><br><br>
+                <div class="input-field col l6 offset-l3">
+                  <input id="ldappass" name="ldappass" type="password" class="validate" autocomplete="off">
+                  <label for="ldappass">Password</label>
+                </div>
+
+                </div>
+
+                <div class="row center">
+                  <span style="color:red; opacity: 0.8">{{error}}</span><br><br>
+                  <button type="submit" id="submit-button" class="btn-large waves-effect waves-light teal lighten-1 ">Login <i class="mdi-content-send right"></i></button>
+
+                </div>
+
+              </form>
+            </div>
+        </div>
+
+
+         <div class="container">
+            <div class="row">
+              <div id ="spinner" class="col l8 offset-l2"></div>
+            </div>
+        </div>
+
+        <br><br>
+
+      </div>
+
+    </div>
+
+
+    <div id="modal1" class="modal">
+      <div class="modal-content">
+        <h4 style="color:teal">Rules</h4>
+        <p>This is the login page for accessing the branch change app. Use your LDAP credentials to login!<br>
+
+          Rules for branch change:<br><br>
+          1. The eligibility criteria for applying for a change of branch program are:<br>
+          (a) Must apply before the start of the third semester.<br>
+          (b) Must complete prescribed course credits in the first two semesters<br>
+          (c) No backlog at the end of the two semesters<br>
+          (d) Secured “reasonable” CPI of: at least 8.00 for general and OBC category students;
+          and at least 7.00 for SC, ST and PwD category students.<br><br>
+          2. Before beginning the allocation, additional seats are made available in each branch, limited
+          to a maximum of 10% of its sanctioned strength (The β factor)<br><br>
+          3. Each available seat may be occupied by students of any category<br><br>
+          4. An eligible student’s request for a shift from branch A to branch B will be considered valid
+          if any one of the following two sets of criteria are satisfied.<br><br>
+          (a) Set 1<br>
+          i. the CPI of the student is at least 9.00<br>
+          ii. there is a seat available in branch B<br>
+          (b) Set 2<br>
+          i. There is a seat available in branch B<br>
+          ii. The strength in branch A, from which a change is being sought, does not fall<br>
+          below its sanctioned strength by more than 25%. (The α factor)<br>
+          iii. There is no student with higher CPI who is currently being denied a change of
+          branch to B due to rule ii above.
+         </p>
+      </div>
+      <div class="modal-footer">
+        <p class="right-align" style="padding-right: 12px">Developed by <span style="color:teal">kuchbhi<span></p>
+      </div>
+    </div>
+
+
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/materialize.min.js" %}"></script>
+    <script>
+    $(document).ready(function() {
+        document.getElementById("myform").reset();
+        $('#myform input').attr('style', '-webkit-box-shadow: inset 0 0 0 1000px #ffffff !important');
+        $('.modal-trigger').leanModal();
+    });
+    $('#submit-button').click(function () {
+      $("#register").hide();
+      var divToAdd = document.getElementById('spinner');
+      var e = document.createElement('div');
+      e.innerHTML = '<br><br><div class="progress"><div class="indeterminate"></div></div>';
+      divToAdd.appendChild(e);
+    });
+    </script>
+
+  </body>
+</html>

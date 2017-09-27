@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load staticfiles %}
+    <title>Branch Change!</title>
+    <link type="text/css" rel="stylesheet" href="{% static "css/materialize.min.css" %}"  media="screen,projection"/>
+
+  </head>
+
+  <body>
+
+    <div class="section no-pad-bot" id="index-banner">
+      <div class="container">
+
+        <br><br>
+        <br><br>
+        <br><br>
+        <h1 class="header center teal-text">Saved!</h1>
+
+
+        <div class="row center">
+          <h6 class="header col s12 light"><span style="color:red; opacity: 0.8">{{warn}}</span><br></h6>
+          <h5 class="header col s12 light">Your settings have been saved! You can check back <a href="/bcapp">here</a>!</h5>
+        </div>
+
+        <br><br>
+
+      </div>
+
+    </div>
+
+
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/materialize.min.js" %}"></script>
+
+  </body>
+</html>

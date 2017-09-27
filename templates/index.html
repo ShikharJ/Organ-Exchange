@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load staticfiles %}
+  <head>
+
+    <title>Branch Change!</title>
+    <link type="text/css" rel="stylesheet" href="{% static "css/materialize.min.css" %}"  media="screen,projection"/>
+
+  </head>
+
+  <body>
+
+
+
+    <div class="section no-pad-bot" id="index-banner">
+      <div class="container">
+
+        <h3 class="header center teal-text">Hi {{userLDAP}}!</h3>
+
+        <div class="row center">
+          <h5 class="header col s12 light offset">Edit and save your settings here!</h5>
+          <div class="col offset-s1"><a class="modal-trigger" style="color:teal;font-size: 18px" href="/bcapp">Cancel</a></div>
+          <div class="col offset-s8"><a class="modal-trigger" style="color:teal;font-size: 18px" href="#modal1">Info</a></div>
+        </div>
+
+      </div>
+
+      <div class="container">
+        <div class="row">
+            <form id ="myform" action = "/saved/" class="col s12" method="post">
+            	{% csrf_token %}
+
+              <div class="row">
+              <div class="col l3 offset-l2">
+                Personal Details:
+              </div>
+              </div>
+              <div class="row">
+              <div class="input-field col l3 offset-l3">
+                <input id="rollno1" name="rollno1" value="{{rollno}}" type="text" class="validate" disabled>
+                <label for="rollno1">Roll No</label>
+                <input hidden id="rollno" name="rollno" value="{{rollno}}" type="text" class="validate">
+                <input hidden id="userldap" name="userldap" value="{{userLDAP}}" type="text" class="validate">
+              </div>
+
+              <div class="input-field col l3">
+                <input autocomplete="off" id="uname" name="uname" value ="{{oldPrefs.1}}"type="text" class="validate">
+                <label for="uname">Name</label>
+              </div>
+        </div>
+        <div class="row">
+            <div class="input-field col l3 offset-l3">
+                  <select id="currb" name ="currb">
+
+                    {% for opt in branches %}
+                      <option value="{{opt}}" {% if opt == oldPrefs.2 %}selected {% endif %}>{{opt}}</option>
+                    {% endfor %}
+
+                  </select>
+                  <label>Current Branch</label>
+            </div>
+
+
+            <div class="input-field col l2">
+                <input autocomplete="off" id="cpi" name="cpi" value ="{{oldPrefs.3}}"type="text" class="validate">
+                <label for="cpi">CPI</label>
+            </div>
+
+            <div class="input-field col l1">
+                <select id="category" name ="category">
+
+                  {% for cg in categories %}
+                     <option value="{{cg}}" {% if cg == oldPrefs.4 %}selected {% endif %}>{{cg}}</option>
+                  {% endfor %}
+
+                </select>
+                <label>Category</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col l5 offset-l2">
+              Preferences:
+            </div>
+            <br>
+            <div class="col l1 offset-l5 center">
+            <a id ="add" href="#" style="color:teal">Add</a>
+            </div>
+            <div class="col l1">
+            <a id ="remove" href="#" style="color:teal">Remove</a>
+            </div>
+        </div>
+
+
+       <div class="row">
+
+          <div id="prefss" class="col l8 offset-l2">
+
+              {% for i in range%}
+                  {% load list_index %}
+                   <div class="input-field col l3">
+                        <select id="pref{{i|add:'1'}}" name ="pref{{i|add:'1'}}">
+
+                          {% for opt in branches %}
+                              <option value="{{opt}}" {% if opt == bcpref|index:i %}selected {% endif %}>{{opt}}</option>
+                          {% endfor %}
+
+                        </select>
+                        <label>Preference {{i|add:'1'}}</label>
+                    </div>
+              {% endfor %}
+
+          </div>
+
+      </div>
+
+              <div class="row center" >
+                <span style="color:red; opacity: 0.8">{{error}}</span><br><br>
+                <button type="submit" id="submit-button" class="btn-large waves-effect waves-light teal lighten-1 ">Save <i class="mdi-content-send right"></i></button>
+              </div>
+
+            </form>
+          </div>
+      </div>
+
+    </div>
+
+    <div id="modal1" class="modal">
+      <div class="modal-content">
+        <h4 style="color:teal">About</h4>
+        <p>
+          Please enter your Branch Preferences along with your Name as well as your CPI(upto 2 Decimal Places) <br>
+          Don't forget to change your category and Current Branch if applicable<br>
+          For changing any entry, just click on the entry and either a scroll menu or a text field would appear<br>
+          You can add and remove preferences using the add and remove button<br>
+          Clicking cancel, will log you out and your last changes wil not be saved
+        </p>
+      </div>
+      <div class="modal-footer">
+        <p class="right-align" style="padding-right: 12px">Developed by <span style="color:teal">kuchbhi<span></p>
+      </div>
+    </div>
+
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/materialize.min.js" %}"></script>
+
+
+    <script>
+    $(document).ready(function() {
+        $('.modal-trigger').leanModal();
+        document.getElementById("myform").reset();
+
+        $('select').material_select();
+        $('#myform input').attr('style', '-webkit-box-shadow: inset 0 0 0 1000px #ffffff !important');
+    });
+    </script>
+
+   <script>
+   var numSelects = {{oldPrefs|length|add:"-5"}};
+   var divid, div, option, e;
+   var branches = {{branches|safe}};
+    $('#add').click(function () {
+
+    if(numSelects >= branches.length - 1)
+      return;
+    numSelects += 1;
+    divid = "pref"+numSelects;
+    var divToAdd = document.getElementById('prefss');
+    e = document.createElement('div');
+    e.innerHTML = '<div class="input-field col l3"><select id="'+divid+'" name ="'+divid+'"></select><label>Preference '+numSelects+'</label></div>';
+    divToAdd.appendChild(e);
+    e = document.getElementById(divid);
+    for (var i = 0; i < branches.length; i++)
+    {
+      option = document.createElement("option");
+      option.setAttribute("value", branches[i]);
+      option.text = branches[i];
+      e.add(option);
+    }
+
+    $('#'+divid).material_select();
+    });
+    $('#remove').click(function () {
+      if(numSelects == 0)
+        return;
+     numSelects -= 1;
+     div = document.getElementById('prefss');
+     div.removeChild(div.lastElementChild);
+    });
+   </script>
+
+
+  </body>
+</html>
