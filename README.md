@@ -1,2 +1,2 @@
 # Organ-Exchange
-A Django-based Web App Implementing Gale Shapley Algorithm in the Medical Context
+A Django-based Web Application Implementing Gale Shapley Algorithm in the Medical Context.
