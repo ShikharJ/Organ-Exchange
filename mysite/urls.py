@@ -20,6 +20,7 @@ from OrganMatching import views
 urlpatterns = [
     url(r'^OrganMatching/', views.index, name = "index"),
     url(r'^admin/$', views.admin, name = "admin"),
+    url(r'^submit/$', views.submit, name = "index"),
 ]
 
 handler404 = "views.error404"
