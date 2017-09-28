@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User, AbstractBaseUser
 from django.contrib import admin
 from django.db import models
-from django import forms
 
 class Patient(models.Model):
     user = models.OneToOneField(User, primary_key = True)
