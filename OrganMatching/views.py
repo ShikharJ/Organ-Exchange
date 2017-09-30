@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-
+from .misc import *
 
 def index(request):
 
@@ -37,23 +37,23 @@ def submit(request):
 
         ADMIN = "Shikhar"
 
-        ############# UNCOMMENT BELOW  FOR AUTHENTICATION #############
-        # (auth,rollno) = doLogin(userLDAP, userPASS)
-        ####################################################################
-
-        ### OR ###
-
         ############### UNCOMMENT FOR NO AUTHENTICATION ################
-        rollno = username
+        user_id = username
         auth = True
         ####################################################################
 
         if auth:
             if username == ADMIN:
-                #request.session['user'] = "admin"
+                request.session['user'] = "admin"
                 return redirect("admin")
             else:
-                return render(request, "OrganMatching/login.html", {"Username": username, "Error": "branches.csv has not been uploaded by admin!"})
+                old_pref = get_content(user_id)
+                donors = get_donors()
+
+                if not donors:
+                    return render(request, "OrganMatching/login.html", {"Username": username, "Error": "donors.csv has not been uploaded by the admin."})
+
+                return render(request, "OrganMatching/index.html", {"Username": username, "User_ID": user_id, "old_pref": old_pref, "donors": donors, "range": range(len(old_pref) - 5), "bcpref": old_pref[5:]})
         else:
             return render(request, "OrganMatching/login.html", {"Username": username, "Error": "Your credentials are incorrect!"})
 
@@ -80,12 +80,29 @@ def resultcsv(request):
         return render(request, "OrganMatching/notadmin.html")
 
 
-#TODO: Improve This
 def upload(request):
 
     if request.method == 'GET':
         return render(request, "OrganMatching/lost.html")
+
     if request.method == 'POST':
         if len(request.FILES) != 2:
             return render(request, "OrganMatching/admin.html", {"Error": "Choose Both Files!"})
+
+        improvise(request.FILES['file1'], request.FILES['file2'])
         return render(request, "OrganMatching/uploaded.html")
+
+
+#TODO: Improve This
+def saved(request):
+
+    if request.method == 'GET':
+        return render(request, "OrganMatching/lost.html")
+
+    if request.method == 'POST':
+        post_data = request.POST
+        error = is_correct(post_data)
+
+        if error == "None":
+            edit_csv(post_data)
+            warn = ""
