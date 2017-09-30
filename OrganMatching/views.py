@@ -14,17 +14,18 @@ def index(request):
 def admin(request):
 
     try:
-        print (request.session['user'])
+        #print (request.session['user'])
         return render(request, "OrganMatching/admin.html")
     except:
         return render(request, "OrganMatching/notadmin.html")
+
 
 def submit(request):
 
     if request.method == 'GET':
         return render(request, "OrganMatching/lost.html")
 
-    if request.method == "POST":
+    if request.method == 'POST':
 
         username = request.POST.get("Username")
         password = request.POST.get("Password")
@@ -47,7 +48,7 @@ def submit(request):
 
         if auth:
             if username == ADMIN:
-                request.session['user'] = "admin"
+                #request.session['user'] = "admin"
                 return redirect("admin")
             else:
                 #TODO
