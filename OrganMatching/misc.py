@@ -41,30 +41,22 @@ def is_correct(post_data):
     if post_data.get("uname") == "":
         return "Please Enter Your Name!"
 
-    cpi = post_data.get("cpi")
-    if cpi == "":
-        return "You have not entered your CPI! Please enter it correct upto 2 decimal places."
+    age = post_data.get("Age")
+    if age == "":
+        return "You have not entered your age! Please enter it correct upto 2 decimal places."
 
     is_num = True
-    count_dot = 0
-    for x in range(0, len(cpi)):
-        if (not cpi[x].isdigit()) and cpi[x] != '.':
+    for x in range(0, len(age)):
+        if not age[x].isdigit():
             is_num = False
             break
-        elif cpi[x] == '.':
-            count_dot += 1
-            if count_dot > 1:
-                is_num = False
-                break
 
     if is_num:
-        val = float(cpi)
-        if val > 10:
-            return "Your CPI is out of bounds!"
-        elif (len(cpi) != 4 and val != 10):
-            return "Please follow the standard CPI format and don't add any extra prefix zeroes!"
+        val = int(age)
+        if val > 80 or val < 4:
+            return "Your age is too advanced / premature for a transplant. Please consult a specialist!"
     else:
-        return "Your CPI isn't a positive number!"
+        return "Your age isn't a positive integer!"
 
     chosen = post_data.get("currb")
     prefs = []
@@ -90,20 +82,20 @@ def is_correct(post_data):
 #TODO: Improve This
 def edit_csv(post_data):
     found = False
-    user_data = [post_data.get("rollno"), post_data.get("uname"), post_data.get("currb"), post_data.get("cpi"), post_data.get("category")]
+    user_data = [post_data.get("User_ID"), post_data.get("uname"), post_data.get("currb"), post_data.get("Age"), post_data.get("Blood_Group")]
 
     for i in range(len(post_data) - 7):
         user_data.append(post_data.get("pref" + str(i + 1)))
 
     if not os.path.isfile("static/patients.csv"):
         f = open("static/patients.csv", "w")
-        f.write("RollNo,Name,CurrentBranch,CPI,Category,Options\n")
+        f.write("User_ID,Name,CurrentBranch,Age,Blood_Group,Options\n")
         f.close()
 
     with open('static/patients.csv', 'r') as inp, open('static/first_edit.csv', 'w') as out:
         writer = csv.writer(out)
         for row in csv.reader(inp):
-            if found or (row[0] != post_data.get("rollno") and row[1] != post_data.get("uname")):
+            if found or (row[0] != post_data.get("User_ID") and row[1] != post_data.get("uname")):
                 writer.writerow(row)
             else:
                 found = True

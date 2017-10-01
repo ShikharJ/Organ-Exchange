@@ -2,6 +2,10 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from OrganMatching.misc import *
 
+blood_groups = ["A", "B", "AB", "O"]
+rhesus_factors = ["+", "-"]
+
+
 def index(request):
 
     try:
@@ -52,7 +56,7 @@ def submit(request):
                 if not donors:
                     return render(request, "OrganMatching/login.html", {"Username": username, "Error": "donors.csv has not been uploaded by the admin."})
 
-                return render(request, "OrganMatching/index.html", {"Username": username, "User_ID": user_id, "old_pref": old_pref, "donors": donors, "range": range(len(old_pref) - 5), "bcpref": old_pref[5:]})
+                return render(request, "OrganMatching/index.html", {"Username": username, "User_ID": user_id, "old_pref": old_pref, "donors": donors, "blood_groups": blood_groups, "rhesus_factors": rhesus_factors, "range": range(len(old_pref) - 5), "bcpref": old_pref[5:]})
         else:
             return render(request, "OrganMatching/login.html", {"Username": username, "Error": "Your credentials are incorrect!"})
 
@@ -102,22 +106,18 @@ def saved(request):
             edit_csv(post_data)
             warn = ""
 
-            if post_data.get("category") == "GEN":
-                if float(post_data.get("cpi")) < 8:
-                    warn = "Your CPI is below the cutoff, but the form was submitted!"
+            if int(post_data.get("Age")) < 18:
+                warn = "Your age is below the legally permitted age, but the form was submitted!"
 
             return render(request, "OrganMatching/saved.html", {"warn": warn})
         else:
-            rollno = post_data.get("rollno")
-            userldap = post_data.get("userldap")
-            oldPrefs = [rollno, post_data.get("uname"), post_data.get("currb"), post_data.get("cpi"),
-                        post_data.get("category")]
+            user_id = post_data.get("User_ID")
+            username = post_data.get("Username")
+            oldPrefs = [user_id, post_data.get("uname"), post_data.get("currb"), post_data.get("Age"),
+                        post_data.get("Blood_Group")]
 
             for i in range(len(post_data) - 7):
                 oldPrefs.append(post_data.get("pref" + str(i + 1)))
             donors = get_donors()
 
-            return render(request, "OrganMatching/index.html",
-                      {"userLDAP": userldap, "rollno": rollno, "oldPrefs": oldPrefs, "branches": donors,
-                       "categories": categories, "range": range(len(oldPrefs) - 5), "bcpref": oldPrefs[5:],
-                       "error": error})
+            return render(request, "OrganMatching/index.html", {"Username": username, "User_ID": user_id, "old_pref": oldPrefs, "donors": donors, "blood_groups": blood_groups, "rhesus_factors": rhesus_factors, "range": range(len(oldPrefs) - 5), "bcpref": oldPrefs[5:], "Error": error})
