@@ -50,13 +50,13 @@ def submit(request):
                 request.session['user'] = "admin"
                 return redirect("admin")
             else:
-                old_pref = get_content(user_id)
+                patient = get_content(user_id)
                 donors = get_donors()
 
                 if not donors:
                     return render(request, "OrganMatching/login.html", {"Username": username, "Error": "donors.csv has not been uploaded by the admin."})
 
-                return render(request, "OrganMatching/index.html", {"Username": username, "User_ID": user_id, "old_pref": old_pref, "donors": donors, "blood_groups": blood_groups, "rhesus_factors": rhesus_factors, "range": range(len(old_pref) - 5), "bcpref": old_pref[5:]})
+                return render(request, "OrganMatching/index.html", {"Username": username, "User_ID": user_id, "patient": patient, "donors": donors, "blood_groups": blood_groups, "rhesus_factors": rhesus_factors, "range": range(len(patient) - 5), "bcpref": patient[5:]})
         else:
             return render(request, "OrganMatching/login.html", {"Username": username, "Error": "Your credentials are incorrect!"})
 
@@ -120,4 +120,4 @@ def saved(request):
                 oldPrefs.append(post_data.get("pref" + str(i + 1)))
             donors = get_donors()
 
-            return render(request, "OrganMatching/index.html", {"Username": username, "User_ID": user_id, "old_pref": oldPrefs, "donors": donors, "blood_groups": blood_groups, "rhesus_factors": rhesus_factors, "range": range(len(oldPrefs) - 5), "bcpref": oldPrefs[5:], "Error": error})
+            return render(request, "OrganMatching/index.html", {"Username": username, "User_ID": user_id, "patient": oldPrefs, "donors": donors, "blood_groups": blood_groups, "rhesus_factors": rhesus_factors, "range": range(len(oldPrefs) - 5), "bcpref": oldPrefs[5:], "Error": error})

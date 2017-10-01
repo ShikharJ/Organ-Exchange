@@ -44,7 +44,7 @@
               </div>
 
               <div class="input-field col l3">
-                <input autocomplete="off" id="uname" name="uname" value ="{{old_pref.1}}"type="text" class="validate">
+                <input autocomplete="off" id="uname" name="uname" value ="{{patient.1}}"type="text" class="validate">
                 <label for="uname">Name</label>
               </div>
         </div>
@@ -53,7 +53,7 @@
                   <select id="currb" name ="currb">
 
                     {% for opt in donors %}
-                      <option value="{{opt}}" {% if opt == old_pref.2 %}selected {% endif %}>{{opt}}</option>
+                      <option value="{{opt}}" {% if opt == patient.2 %}selected {% endif %}>{{opt}}</option>
                     {% endfor %}
 
                   </select>
@@ -62,7 +62,7 @@
 
 
             <div class="input-field col l1">
-                <input autocomplete="off" id="Age" name="Age" value ="{{old_pref.3}}"type="text" class="validate">
+                <input autocomplete="off" id="Age" name="Age" value ="{{patient.3}}"type="text" class="validate">
                 <label for="Age">Age</label>
             </div>
 
@@ -70,7 +70,7 @@
                 <select id="Blood_Group" name ="Blood_Group">
 
                   {% for bg in blood_groups %}
-                     <option value="{{bg}}" {% if bg == old_pref.4 %}selected {% endif %}>{{bg}}</option>
+                     <option value="{{bg}}" {% if bg == patient.4 %}selected {% endif %}>{{bg}}</option>
                   {% endfor %}
 
                 </select>
@@ -81,7 +81,7 @@
                 <select id="Rhesus_Factor" name ="Rhesus_Factor">
 
                   {% for rf in rhesus_factors %}
-                     <option value="{{rf}}" {% if rf == old_pref.4 %}selected {% endif %}>{{rf}}</option>
+                     <option value="{{rf}}" {% if rf == patient.4 %}selected {% endif %}>{{rf}}</option>
                   {% endfor %}
 
                 </select>
@@ -131,7 +131,7 @@
     </script>
 
    <script>
-   var numSelects = {{old_pref|length|add:"-5"}};
+   var numSelects = {{patient|length|add:"-5"}};
    var divid, div, option, e;
    var donors = {{donors|safe}};
     $('#add').click(function () {
