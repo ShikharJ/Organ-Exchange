@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .misc import *
+from OrganMatching.misc import *
 
 def index(request):
 
@@ -15,7 +15,6 @@ def index(request):
 def admin(request):
 
     try:
-        #print (request.session['user'])
         return render(request, "OrganMatching/admin.html")
     except:
         return render(request, "OrganMatching/notadmin.html")
@@ -58,21 +57,17 @@ def submit(request):
             return render(request, "OrganMatching/login.html", {"Username": username, "Error": "Your credentials are incorrect!"})
 
 
-#TODO: Improve This
 def resultview(request):
 
     try:
-        #print (request.session['user'])
         return render(request, "OrganMatching/result.html")
     except:
         return render(request, "OrganMatching/notadmin.html")
 
 
-#TODO: Improve This
 def resultcsv(request):
 
     try:
-        #print (request.session['user'])
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="results.csv"'
         return response
@@ -106,3 +101,23 @@ def saved(request):
         if error == "None":
             edit_csv(post_data)
             warn = ""
+
+            if post_data.get("category") == "GEN":
+                if float(post_data.get("cpi")) < 8:
+                    warn = "Your CPI is below the cutoff, but the form was submitted!"
+
+            return render(request, "OrganMatching/saved.html", {"warn": warn})
+        else:
+            rollno = post_data.get("rollno")
+            userldap = post_data.get("userldap")
+            oldPrefs = [rollno, post_data.get("uname"), post_data.get("currb"), post_data.get("cpi"),
+                        post_data.get("category")]
+
+            for i in range(len(post_data) - 7):
+                oldPrefs.append(post_data.get("pref" + str(i + 1)))
+            donors = get_donors()
+
+            return render(request, "OrganMatching/index.html",
+                      {"userLDAP": userldap, "rollno": rollno, "oldPrefs": oldPrefs, "branches": donors,
+                       "categories": categories, "range": range(len(oldPrefs) - 5), "bcpref": oldPrefs[5:],
+                       "error": error})

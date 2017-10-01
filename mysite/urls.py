@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^OrganMatching/', views.index, name = "index"),
     url(r'^admin/$', views.admin, name = "admin"),
     url(r'^submit/$', views.submit, name = "index"),
+    url(r'^saved/$', views.saved, name="saved"),
     url(r'^upload/$', views.upload, name="upload"),
     url(r'^resultview/$', views.resultview, name="resultview"),
     url(r'^resultcsv/$', views.resultcsv, name="resultcsv"),
