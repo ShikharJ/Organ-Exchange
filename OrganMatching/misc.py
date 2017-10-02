@@ -38,7 +38,7 @@ def improvise(x, y):
 #TODO: Improve This
 def is_correct(post_data):
 
-    if post_data.get("uname") == "":
+    if post_data.get("Name") == "":
         return "Please Enter Your Name!"
 
     age = post_data.get("Age")
@@ -58,44 +58,24 @@ def is_correct(post_data):
     else:
         return "Your age isn't a positive integer!"
 
-    chosen = post_data.get("currb")
-    prefs = []
-
-    if len(post_data) == 7:
-        return "Please choose at least 1 preference!"
-
-    for i in range(len(post_data) - 7):
-        prefs.append(post_data.get("pref" + str(i + 1)))
-
-    for pref in prefs:
-        if pref == chosen:
-            return "You can't have your current branch as a preference!"
-
-    for i in range(len(prefs)):
-        for j in range(i + 1, len(prefs)):
-            if prefs[i] == prefs[j]:
-                return "No two preferences can be the same!"
-
     return "none"
 
 
 #TODO: Improve This
 def edit_csv(post_data):
-    found = False
-    user_data = [post_data.get("User_ID"), post_data.get("uname"), post_data.get("currb"), post_data.get("Age"), post_data.get("Blood_Group")]
 
-    for i in range(len(post_data) - 7):
-        user_data.append(post_data.get("pref" + str(i + 1)))
+    found = False
+    user_data = [post_data.get("User_ID"), post_data.get("Name"), post_data.get("Blood_Report"), post_data.get("Age"), post_data.get("Blood_Group")]
 
     if not os.path.isfile("static/patients.csv"):
         f = open("static/patients.csv", "w")
-        f.write("User_ID,Name,CurrentBranch,Age,Blood_Group,Options\n")
+        f.write("User_ID,Name,Blood_Report,Age,Blood_Group,Options\n")
         f.close()
 
     with open('static/patients.csv', 'r') as inp, open('static/first_edit.csv', 'w') as out:
         writer = csv.writer(out)
         for row in csv.reader(inp):
-            if found or (row[0] != post_data.get("User_ID") and row[1] != post_data.get("uname")):
+            if found or (row[0] != post_data.get("User_ID") and row[1] != post_data.get("Name")):
                 writer.writerow(row)
             else:
                 found = True

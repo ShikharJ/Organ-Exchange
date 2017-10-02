@@ -4,6 +4,7 @@ from OrganMatching.misc import *
 
 blood_groups = ["A", "B", "AB", "O"]
 rhesus_factors = ["+", "-"]
+reports = ["Positive", "Negative"]
 
 
 def index(request):
@@ -24,7 +25,6 @@ def admin(request):
         return render(request, "OrganMatching/notadmin.html")
 
 
-#TODO: Improve This
 def submit(request):
 
     if request.method == 'GET':
@@ -56,7 +56,7 @@ def submit(request):
                 if not donors:
                     return render(request, "OrganMatching/login.html", {"Username": username, "Error": "donors.csv has not been uploaded by the admin."})
 
-                return render(request, "OrganMatching/index.html", {"Username": username, "User_ID": user_id, "patient": patient, "donors": donors, "blood_groups": blood_groups, "rhesus_factors": rhesus_factors, "range": range(len(patient) - 5), "bcpref": patient[5:]})
+                return render(request, "OrganMatching/index.html", {"Username": username, "User_ID": user_id, "patient": patient, "donors": donors, "blood_groups": blood_groups, "rhesus_factors": rhesus_factors, "reports": reports})
         else:
             return render(request, "OrganMatching/login.html", {"Username": username, "Error": "Your credentials are incorrect!"})
 
@@ -92,7 +92,6 @@ def upload(request):
         return render(request, "OrganMatching/uploaded.html")
 
 
-#TODO: Improve This
 def saved(request):
 
     if request.method == 'GET':
@@ -113,11 +112,8 @@ def saved(request):
         else:
             user_id = post_data.get("User_ID")
             username = post_data.get("Username")
-            oldPrefs = [user_id, post_data.get("uname"), post_data.get("currb"), post_data.get("Age"),
-                        post_data.get("Blood_Group")]
+            patient = [user_id, post_data.get("Name"), post_data.get("Blood_Report"), post_data.get("Age"), post_data.get("Blood_Group")]
 
-            for i in range(len(post_data) - 7):
-                oldPrefs.append(post_data.get("pref" + str(i + 1)))
             donors = get_donors()
 
-            return render(request, "OrganMatching/index.html", {"Username": username, "User_ID": user_id, "patient": oldPrefs, "donors": donors, "blood_groups": blood_groups, "rhesus_factors": rhesus_factors, "range": range(len(oldPrefs) - 5), "bcpref": oldPrefs[5:], "Error": error})
+            return render(request, "OrganMatching/index.html", {"Username": username, "User_ID": user_id, "patient": patient, "donors": donors, "blood_groups": blood_groups, "rhesus_factors": rhesus_factors, "reports": reports, "Error": error})

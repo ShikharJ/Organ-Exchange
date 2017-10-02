@@ -37,27 +37,27 @@
               </div>
               <div class="row">
               <div class="input-field col l3 offset-l3">
-                <input id="User_ID1" name="User_ID  1" value="{{User_ID}}" type="text" class="validate" disabled>
+                <input id="User_ID1" name="User_ID1" value="{{User_ID}}" type="text" class="validate" disabled>
                 <!--<label for="rollno1">User ID</label>-->
                 <input hidden id="User_ID" name="User_ID" value="{{User_ID}}" type="text" class="validate">
                 <input hidden id="Username" name="Username" value="{{Username}}" type="text" class="validate">
               </div>
 
               <div class="input-field col l3">
-                <input autocomplete="off" id="uname" name="uname" value ="{{patient.1}}"type="text" class="validate">
-                <label for="uname">Name</label>
+                <input autocomplete="off" id="Name" name="Name" value ="{{patient.1}}"type="text" class="validate">
+                <label for="Name">Name</label>
               </div>
         </div>
         <div class="row">
             <div class="input-field col l2 offset-l3">
-                  <select id="currb" name ="currb">
+                  <select id="Blood_Report" name ="Blood_Report">
 
-                    {% for opt in donors %}
-                      <option value="{{opt}}" {% if opt == patient.2 %}selected {% endif %}>{{opt}}</option>
+                    {% for rept in reports %}
+                      <option value="{{rept}}" {% if rept == patient.2 %}selected {% endif %}>{{rept}}</option>
                     {% endfor %}
 
                   </select>
-                  <label>Current Branch</label>
+                  <label>Blood Report</label>
             </div>
 
 
@@ -104,10 +104,11 @@
       <div class="modal-content">
         <h4 style="color:teal">Information</h4>
         <p>
-          Please enter your organ transplant requirements along with your name as well as your age (as an integer).<br>
-          Don't forget to change your blood report if applicable.<br>
-          For changing any entry, just click on the entry and either a scroll menu or a text field would appear.<br>
-          Clicking cancel will log you out and your last changes will not be saved.
+          1) Please enter your organ transplant requirements along with your name as well as your age (as an integer).<br>
+          2) Don't forget to change your blood report if applicable. A positive blood report signals a presence of a
+            transmissible disease, and a negative report signals an absence of the same.<br>
+          3) For changing any entry, just click on the entry and either a scroll menu or a text field would appear.<br>
+          4) Clicking cancel will log you out and your last changes will not be saved.
         </p>
       </div>
       <div class="modal-footer">
@@ -129,41 +130,6 @@
         $('#myform input').attr('style', '-webkit-box-shadow: inset 0 0 0 1000px #ffffff !important');
     });
     </script>
-
-   <script>
-   var numSelects = {{patient|length|add:"-5"}};
-   var divid, div, option, e;
-   var donors = {{donors|safe}};
-    $('#add').click(function () {
-
-    if(numSelects >= donors.length - 1)
-      return;
-    numSelects += 1;
-    divid = "pref"+numSelects;
-    var divToAdd = document.getElementById('prefss');
-    e = document.createElement('div');
-    e.innerHTML = '<div class="input-field col l3"><select id="'+divid+'" name ="'+divid+'"></select><label>Preference '+numSelects+'</label></div>';
-    divToAdd.appendChild(e);
-    e = document.getElementById(divid);
-    for (var i = 0; i < donors.length; i++)
-    {
-      option = document.createElement("option");
-      option.setAttribute("value", donors[i]);
-      option.text = donors[i];
-      e.add(option);
-    }
-
-    $('#'+divid).material_select();
-    });
-    $('#remove').click(function () {
-      if(numSelects == 0)
-        return;
-     numSelects -= 1;
-     div = document.getElementById('prefss');
-     div.removeChild(div.lastElementChild);
-    });
-   </script>
-
 
   </body>
 </html>
