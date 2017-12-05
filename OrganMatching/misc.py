@@ -1,7 +1,6 @@
 import os, csv
 
 
-#TODO: Improve This
 def get_content(user_id):
 
     with open('static/patients.csv', 'r') as inp:
@@ -9,10 +8,9 @@ def get_content(user_id):
             if row[0] == user_id:
                 return row
 
-    return ["", "", "", "", ""]
+    return ["", "", "", "", "", ""]
 
 
-#TODO: Improve This
 def get_donors():
 
     donors = []
@@ -28,14 +26,13 @@ def improvise(x, y):
 
     with open('static/patients.csv', 'w') as destination:
         for chunk in x.chunks():
-            destination.write(chunk)
+            destination.write(chunk.decode("utf-8"))
 
     with open('static/donors.csv', 'w') as destination:
         for chunk in y.chunks():
-            destination.write(chunk)
+            destination.write(chunk.decode("utf-8"))
 
 
-#TODO: Improve This
 def is_correct(post_data):
 
     if post_data.get("Name") == "":
@@ -61,15 +58,14 @@ def is_correct(post_data):
     return "None"
 
 
-#TODO: Improve This
 def edit_csv(post_data):
 
     found = False
-    user_data = [post_data.get("User_ID"), post_data.get("Name"), post_data.get("Blood_Report"), post_data.get("Age"), post_data.get("Blood_Group")]
+    user_data = [post_data.get("User_ID"), post_data.get("Name"), post_data.get("Blood_Report"), post_data.get("Age"), post_data.get("Blood_Group"), post_data.get("Rhesus_Factor")]
 
     if not os.path.isfile("static/patients.csv"):
         f = open("static/patients.csv", "w")
-        f.write("User_ID,Name,Blood_Report,Age,Blood_Group,Options\n")
+        f.write("User_ID,Name,Blood_Report,Age,Blood_Group,Rhesus_Factor,Options\n")
         f.close()
 
     with open('static/patients.csv', 'r') as inp, open('static/first_edit.csv', 'w') as out:
