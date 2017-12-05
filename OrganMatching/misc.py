@@ -43,7 +43,7 @@ def is_correct(post_data):
 
     age = post_data.get("Age")
     if age == "":
-        return "You have not entered your age! Please enter it correct upto 2 decimal places."
+        return "You have not entered your age! Please enter it correct up to 2 decimal places."
 
     is_num = True
     for x in range(0, len(age)):
@@ -58,7 +58,7 @@ def is_correct(post_data):
     else:
         return "Your age isn't a positive integer!"
 
-    return "none"
+    return "None"
 
 
 #TODO: Improve This

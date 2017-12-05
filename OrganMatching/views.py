@@ -108,7 +108,7 @@ def saved(request):
             if int(post_data.get("Age")) < 18:
                 warn = "Your age is below the legally permitted age, but the form was submitted!"
 
-            return render(request, "OrganMatching/saved.html", {"warn": warn})
+            return render(request, "OrganMatching/saved.html", {"Warn": warn})
         else:
             user_id = post_data.get("User_ID")
             username = post_data.get("Username")
