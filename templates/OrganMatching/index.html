@@ -81,13 +81,41 @@
                 <select id="Rhesus_Factor" name ="Rhesus_Factor">
 
                   {% for rf in rhesus_factors %}
-                     <option value="{{rf}}" {% if rf == patient.4 %}selected {% endif %}>{{rf}}</option>
+                     <option value="{{rf}}" {% if rf == patient.5 %}selected {% endif %}>{{rf}}</option>
                   {% endfor %}
 
                 </select>
                 <label>Rhesus Factor</label>
             </div>
         </div>
+
+            <div class="row">
+                <div class="col l5 offset-l2"> Donor Organ Required:
+                </div>
+                <br>
+                <div class="col l1 offset-l5 center">
+                    <a id ="add" href="#" style="color:teal">Add</a>
+                </div>
+                <div class="col l1">
+                    <a id ="remove" href="#" style="color:teal">Remove</a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div id="prefss" class="col l8 offset-l2">
+                    {% for i in range%}
+                        {% load list_index %}
+                        <div class="input-field col l3">
+                            <select id="Organ_Requirement{{i|add:'1'}}" name ="Organ_Requirement{{i|add:'1'}}">
+                                {% for opt in donors %}
+                                    <option value="{{opt}}" {% if opt == orgreq|index:i %}selected {% endif %}>{{opt}}</option>
+                                {% endfor %}
+                            </select>
+                            <label>Donor Organ {{i|add:'1'}}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
 
               <div class="row center" >
                 <span style="color:red; opacity: 0.8">{{Error}}</span><br><br>
@@ -129,6 +157,37 @@
         $('select').material_select();
         $('#myform input').attr('style', '-webkit-box-shadow: inset 0 0 0 1000px #ffffff !important');
     });
+    </script>
+
+    <script>
+        var numSelects = {{patient|length|add:"-6"}};
+        var divid, div, option, e;
+        var donors = {{donors|safe}};
+        $('#add').click(function () {
+            if(numSelects >= donors.length - 1)
+                return;
+            numSelects += 1;
+		    divid = "Organ_Requirement"+numSelects;
+		    var divToAdd = document.getElementById('prefss');
+		    e = document.createElement('div');
+		    e.innerHTML = '<div class="input-field col l3"><select id="'+divid+'" name ="'+divid+'"></select><label>Donor Organ '+numSelects+'</label></div>';
+		    divToAdd.appendChild(e);
+		    e = document.getElementById(divid);
+		    for (var i = 0; i < donors.length; i++) {
+		        option = document.createElement("option");
+		        option.setAttribute("value", donors[i]);
+		        option.text = donors[i];
+		        e.add(option);
+		    }
+
+		    $('#'+divid).material_select();});
+		    $('#remove').click(function () {
+		      if(numSelects == 0)
+		        return;
+		     numSelects -= 1;
+		     div = document.getElementById('prefss');
+		     div.removeChild(div.lastElementChild);
+		    });
     </script>
 
   </body>

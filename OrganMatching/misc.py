@@ -55,6 +55,19 @@ def is_correct(post_data):
     else:
         return "Your age isn't a positive integer!"
 
+    orgreqs = []
+
+    if len(post_data) == 8:
+        return "Please Do Not Fill Non-Essential Forms!"
+
+    for i in range(len(post_data) - 8):
+        orgreqs.append(post_data.get("Organ_Requirement" + str(i + 1)))
+
+    for i in range(len(orgreqs)):
+        for j in range(i + 1, len(orgreqs)):
+            if orgreqs[i] == orgreqs[j]:
+                return "No two preferences can be the same!"
+
     return "None"
 
 
@@ -62,6 +75,9 @@ def edit_csv(post_data):
 
     found = False
     user_data = [post_data.get("User_ID"), post_data.get("Name"), post_data.get("Blood_Report"), post_data.get("Age"), post_data.get("Blood_Group"), post_data.get("Rhesus_Factor")]
+
+    for i in range(len(post_data) - 8):
+        user_data.append(post_data.get("Organ_Requirement" + str(i + 1)))
 
     if not os.path.isfile("static/patients.csv"):
         f = open("static/patients.csv", "w")

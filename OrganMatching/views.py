@@ -112,8 +112,9 @@ def saved(request):
         else:
             user_id = post_data.get("User_ID")
             username = post_data.get("Username")
-            patient = [user_id, post_data.get("Name"), post_data.get("Blood_Report"), post_data.get("Age"), post_data.get("Blood_Group")]
-
+            patient = [user_id, post_data.get("Name"), post_data.get("Blood_Report"), post_data.get("Age"), post_data.get("Blood_Group"), post_data.get("Rhesus_Factor")]
+            for i in range(len(post_data) - 8):
+                patient.append(post_data.get("Organ_Requirement" + str(i + 1)))
             donors = get_donors()
 
-            return render(request, "OrganMatching/index.html", {"Username": username, "User_ID": user_id, "patient": patient, "donors": donors, "blood_groups": blood_groups, "rhesus_factors": rhesus_factors, "reports": reports, "Error": error})
+            return render(request, "OrganMatching/index.html", {"Username": username, "User_ID": user_id, "patient": patient, "donors": donors, "blood_groups": blood_groups, "rhesus_factors": rhesus_factors, "reports": reports, "range":range(len(patient) - 6), "orgreq":patient[6:], "Error": error})
