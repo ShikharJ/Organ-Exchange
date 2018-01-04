@@ -43,7 +43,7 @@ def submit(request):
         ############### UNCOMMENT FOR NO AUTHENTICATION ################
         user_id = username
         auth = True
-        ####################################################################
+        ################################################################
 
         if auth:
             if username == ADMIN:
@@ -56,11 +56,11 @@ def submit(request):
                 if not donors:
                     return render(request, "OrganMatching/login.html", {"Username": username, "Error": "donors.csv has not been uploaded by the admin."})
 
-                return render(request, "OrganMatching/index.html", {"Username": username, "User_ID": user_id, "patient": patient, "donors": donors, "blood_groups": blood_groups, "rhesus_factors": rhesus_factors, "reports": reports})
+                return render(request, "OrganMatching/index.html", {"Username": username, "User_ID": user_id, "patient": patient, "donors": donors, "blood_groups": blood_groups, "rhesus_factors": rhesus_factors, "reports": reports, "range":range(len(patient) - 6), "orgreq":patient[6:]})
         else:
             return render(request, "OrganMatching/login.html", {"Username": username, "Error": "Your credentials are incorrect!"})
 
-
+#TODO: Complete this
 def resultview(request):
 
     try:
@@ -68,7 +68,7 @@ def resultview(request):
     except:
         return render(request, "OrganMatching/notadmin.html")
 
-
+#TODO: Complete this
 def resultcsv(request):
 
     try:

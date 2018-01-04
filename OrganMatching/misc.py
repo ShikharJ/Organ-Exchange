@@ -66,7 +66,7 @@ def is_correct(post_data):
     for i in range(len(orgreqs)):
         for j in range(i + 1, len(orgreqs)):
             if orgreqs[i] == orgreqs[j]:
-                return "No two preferences can be the same!"
+                return "No two requirements can be the same!"
 
     return "None"
 
