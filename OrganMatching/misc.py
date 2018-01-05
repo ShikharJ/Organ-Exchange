@@ -81,7 +81,7 @@ def edit_csv(post_data):
 
     if not os.path.isfile("static/patients.csv"):
         f = open("static/patients.csv", "w")
-        f.write("User_ID,Name,Blood_Report,Age,Blood_Group,Rhesus_Factor,Options\n")
+        f.write("User_ID,Name,Blood_Report,Age,Blood_Group,Rhesus_Factor,Requirements\n")
         f.close()
 
     with open('static/patients.csv', 'r') as inp, open('static/first_edit.csv', 'w') as out:

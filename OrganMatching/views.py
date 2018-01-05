@@ -60,7 +60,7 @@ def submit(request):
         else:
             return render(request, "OrganMatching/login.html", {"Username": username, "Error": "Your credentials are incorrect!"})
 
-#TODO: Complete this
+#TODO: Complete This
 def resultview(request):
 
     try:
@@ -68,7 +68,7 @@ def resultview(request):
     except:
         return render(request, "OrganMatching/notadmin.html")
 
-#TODO: Complete this
+#TODO: Complete This
 def resultcsv(request):
 
     try:
