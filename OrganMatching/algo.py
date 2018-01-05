@@ -7,8 +7,8 @@ def gale_shapley(donorfile, patientfile):
 
         def __init__(self, information, donor_id):
             self.code = donor_id
-            self.donor = information[0]
-            self.type = information[1]
+            self.donor = information[1]
+            self.type = information[0]
             self.blood_group = information[2]
             self.rhesus_factor = information[3]
             self.allocated = 0
@@ -24,6 +24,7 @@ def gale_shapley(donorfile, patientfile):
             self.blood_group = information[4]
             self.rhesus_factor = information[5]
             self.requirements = []
+            self.requested = information[6:]
             for requirement in information[6:]:
                 if requirement:
                     self.requirements.append(donor_map[requirement])
@@ -40,7 +41,7 @@ def gale_shapley(donorfile, patientfile):
             else:
                 allocated_list = []
                 for i in self.allocated:
-                    allocated_list.append(str(donors[i].name) + " (" + str(donors[i].type) + ") ")
+                    allocated_list.append(str(donors[i].donor) + " (" + str(donors[i].type) + ") ")
                 return allocated_list
 
         def amend(self, req):
@@ -116,7 +117,7 @@ def gale_shapley(donorfile, patientfile):
             else:
                 allocated_organ = Organ(row, num_organs)
                 donors.append(allocated_organ)
-                donor_map[allocated_organ.type].append(allocated_organ.code)
+                donor_map[allocated_organ.type] = allocated_organ.code
                 num_organs = num_organs + 1
 
     with open(patientfile, 'r') as csvfile:
@@ -153,14 +154,12 @@ def gale_shapley(donorfile, patientfile):
         for i in to_delete:
             temp_patients.pop(i)
         del to_delete[:]
-        for donor in donors:
-            donor.resetdata()
 
     patients.extend(ineligible_patients)
     patients = list(sorted(patients, key=lambda x: (x.id, x.name.lower())))
 
     for current_patient in patients:
-        final_list.append([current_patient.id, current_patient.name].append(current_patient.final_status()))
+        final_list.append([current_patient.id, current_patient.name, current_patient.requested, current_patient.final_status()])
     for current_donor in donors:
         final_donor_list.append([current_donor.type, current_donor.allocated])
 
