@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from OrganMatching.misc import *
+from OrganMatching.algo import *
 
 blood_groups = ["A", "B", "AB", "O"]
 rhesus_factors = ["+", "-"]
@@ -60,20 +61,24 @@ def submit(request):
         else:
             return render(request, "OrganMatching/login.html", {"Username": username, "Error": "Your credentials are incorrect!"})
 
-#TODO: Complete This
+
 def resultview(request):
 
     try:
-        return render(request, "OrganMatching/result.html")
+        final_list, donor_list = gale_shapley("static/donors.csv", "static/patients.csv")
+        return render(request, "OrganMatching/result.html", {"final_list": final_list})
     except:
         return render(request, "OrganMatching/notadmin.html")
 
-#TODO: Complete This
+
 def resultcsv(request):
 
     try:
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="results.csv"'
+        final_list, donor_list = gale_shapley("static/donors.csv", "static/patients.csv")
+        writer = csv.writer(response)
+        writer.writerows(final_list)
         return response
     except:
         return render(request, "OrganMatching/notadmin.html")
